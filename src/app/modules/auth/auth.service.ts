@@ -8,22 +8,19 @@ import { createToken, verifyToken } from './auth.utils';
 
 const loginUser = async (payload: TLoginUser) => {
     const user = await User.isUserExistsByEmail(payload.email);
-    console.log(user)
 
     // Check if user exists
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
     }
 
-    console.log('Plain text password:', payload?.password);
-    console.log('Hashed password:', user?.password);
-
-    const x = await bcrypt.compare(payload?.password, user?.password)
-    console.log(x)
     // Check if password is correct
-    if (!x) {
+    if (!(await await bcrypt.compare(payload?.password, user?.password))) {
         throw new AppError(httpStatus.FORBIDDEN, 'Password did not match!');
     }
+    // if (payload?.password !== user?.password) {
+    //     throw new AppError(httpStatus.FORBIDDEN, 'Password did not match!');
+    // }
 
 
     //----------------Create jsonwebtoken and send to the client-----------------

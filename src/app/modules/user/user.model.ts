@@ -25,15 +25,6 @@ const userSchema = new Schema<TUser, UserModel>(
     }
 );
 
-// -----------------Document (save / remove) Middleware / hook (Pre + Post)-------------------
-userSchema.pre('save', async function (next) {
-    this.password = await bcrypt.hash(
-        this.password, //this= current user document
-        Number(config.bcrypt_salt_rounds),
-    );
-    next();
-});
-
 userSchema.post('save', function (doc, next) {
     //Posting password empty in database
     doc.password = '';
