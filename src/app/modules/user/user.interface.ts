@@ -2,10 +2,10 @@
 import { Model } from 'mongoose';
 
 export interface TUser {
-    name: string;
+    fullName: string;
     email: string;
     password: string;
-    img: string;
+    profilePic: string;
 }
 
 export interface UserModel extends Model<TUser> {

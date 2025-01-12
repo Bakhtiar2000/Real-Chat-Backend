@@ -15,7 +15,7 @@ const loginUser = async (payload: TLoginUser) => {
     }
 
     // Check if password is correct
-    if (!(await await bcrypt.compare(payload?.password, user?.password))) {
+    if (!(await bcrypt.compare(payload?.password, user?.password))) {
         throw new AppError(httpStatus.FORBIDDEN, 'Password did not match!');
     }
     // if (payload?.password !== user?.password) {

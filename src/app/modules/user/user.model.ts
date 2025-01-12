@@ -1,13 +1,11 @@
 import { Schema, model } from 'mongoose';
 import { TUser, UserModel } from './user.interface';
-import config from '../../config';
-import bcrypt from 'bcrypt';
 
 const userSchema = new Schema<TUser, UserModel>(
     {
-        name: {
+        fullName: {
             type: String,
-            required: [true, 'Name is required'],
+            required: [true, 'fullName is required'],
         },
         email: {
             type: String,
@@ -19,8 +17,9 @@ const userSchema = new Schema<TUser, UserModel>(
             required: [true, 'Password is required'],
             select: 0,
         },
-        img: {
+        profilePic: {
             type: String,
+            default: "",
         },
     }
 );
