@@ -21,7 +21,8 @@ const userSchema = new Schema<TUser, UserModel>(
             type: String,
             default: "",
         },
-    }
+    },
+    { timestamps: true }
 );
 
 userSchema.post('save', function (doc, next) {
