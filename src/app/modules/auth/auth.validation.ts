@@ -7,6 +7,14 @@ const loginValidationSchema = z.object({
     }),
 });
 
+const registerValidationSchema = z.object({
+    body: z.object({
+        fullName: z.string(),
+        email: z.string().email('Invalid email format'),
+        password: z.string().max(20, { message: 'Password cannot be more than 20 characters' })
+    }),
+});
+
 const refreshTokenValidationSchema = z.object({
     cookies: z.object({
         refreshToken: z.string({
@@ -17,6 +25,6 @@ const refreshTokenValidationSchema = z.object({
 
 export const AuthValidation = {
     loginValidationSchema,
-    refreshTokenValidationSchema,
-
+    registerValidationSchema,
+    refreshTokenValidationSchema
 };

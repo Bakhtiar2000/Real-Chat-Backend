@@ -1,10 +1,9 @@
-import { User } from "../user/user.model";
+import { User } from "../auth/auth.model";
 import { Message } from "./message.model";
 import { getReceiverSocketId, io } from "../../lib/socket";
 import cloudinary from "../../lib/cloudinary";
 
 const getSidebarUsersFromDB = async (email: string) => {
-    console.log(email)
     const result = await User.find({ email: { $ne: email } }).select("-password");
     return result
 };
@@ -23,8 +22,8 @@ const sendMessage = async (payload: { text?: string, image?: string }, receiverI
     const { text, image } = payload;
     let imageUrl;
     if (image) {
-        const uploadResponse = await cloudinary.uploader.upload(image);
-        imageUrl = uploadResponse.secure_url;
+        const uploaded = await cloudinary.uploader.upload(image);
+        imageUrl = uploaded.secure_url;
     }
 
     console.log({

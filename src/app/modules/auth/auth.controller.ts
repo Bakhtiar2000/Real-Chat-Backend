@@ -24,6 +24,16 @@ const loginUser = catchAsync(async (req, res) => {
     });
 });
 
+const register = catchAsync(async (req, res) => {
+    const result = await AuthServices.registerUserIntoDB(req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User is registered successfully',
+        data: result,
+    });
+});
+
 const refreshToken = catchAsync(async (req, res) => {
     const { refreshToken } = req.cookies;
     const result = await AuthServices.refreshToken(refreshToken);
@@ -35,7 +45,30 @@ const refreshToken = catchAsync(async (req, res) => {
     });
 });
 
+const logout = catchAsync(async (req, res) => {
+    res.cookie("refreshToken", "", { maxAge: 0 });
+    res.cookie("accessToken", "", { maxAge: 0 });
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User logout successful!',
+        data: "",
+    });
+});
+
+const checkAuth = catchAsync(async (req, res) => {
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Checking auth!',
+        data: req.user,
+    });
+});
+
 export const AuthControllers = {
     loginUser,
+    register,
     refreshToken,
+    logout,
+    checkAuth
 };

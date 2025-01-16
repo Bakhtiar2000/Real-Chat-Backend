@@ -10,7 +10,7 @@ const httpServer = new Server(app);
 // Set up Socket.IO
 const io = new SocketIOServer(httpServer, {
     cors: {
-        origin: ['http://localhost:5173'],
+        origin: ['http://localhost:5173'], // Adjust this as needed
     },
 });
 
@@ -26,7 +26,6 @@ io.on('connection', (socket) => {
     console.log('A user connected', socket.id);
 
     const userId = socket.handshake.query.userId as string | undefined;
-
     if (userId) {
         userSocketMap[userId] = socket.id;
     }

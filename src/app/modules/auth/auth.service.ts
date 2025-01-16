@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
-import { TLoginUser } from './auth.interface';
+import { TLoginUser, TUser } from './auth.interface';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import { createToken, verifyToken } from './auth.utils';
@@ -18,10 +18,6 @@ const loginUser = async (payload: TLoginUser) => {
     if (!(await bcrypt.compare(payload?.password, user?.password))) {
         throw new AppError(httpStatus.FORBIDDEN, 'Password did not match!');
     }
-    // if (payload?.password !== user?.password) {
-    //     throw new AppError(httpStatus.FORBIDDEN, 'Password did not match!');
-    // }
-
 
     //----------------Create jsonwebtoken and send to the client-----------------
     const jwtPayload = {
@@ -49,6 +45,17 @@ const loginUser = async (payload: TLoginUser) => {
     };
 };
 
+const registerUserIntoDB = async (payload: TUser) => {
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(
+        payload?.password,
+        Number(config.bcrypt_salt_rounds)
+    );
+
+    payload.password = hashedPassword
+    const result = await User.create(payload);
+    return result;
+};
 
 const refreshToken = async (token: string) => {
 
@@ -79,5 +86,6 @@ const refreshToken = async (token: string) => {
 
 export const AuthServices = {
     loginUser,
+    registerUserIntoDB,
     refreshToken,
 };
